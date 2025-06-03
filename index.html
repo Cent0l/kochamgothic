@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="language" content="pl" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EmPeTrójniej</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+  <header>JESZCZENWM</header>
+
+  <main>
+    <!-- ============================
+         Sekcja Gracze
+         ============================ -->
+    <section id="players">
+      <h2>Gracze</h2>
+      <div id="player-list"></div>
+      <button id="add-player">Dodaj gracza</button>
+      <!-- Oddzielne przyciski dla każdej lampki -->
+      <button id="next-turn" class="next-btn">Następna tura</button>
+      <button id="next-answer" class="next-btn">Następny odpowiada</button>
+    </section>
+
+    <!-- ============================
+         Sekcja Pytania (Tabela 6×6)
+         ============================ -->
+    <section id="question-board">
+      <h2>Pytania</h2>
+      <table id="question-table"></table>
+    </section>
+  </main>
+
+  <footer>Teleturniej Toczkensa. Created by SiemkaMati</footer>
+
+  <script>
+    /* ============================
+       ZMIENNE GLOBALNE
+       ============================ */
+    const playerList = document.getElementById("player-list");
+    const addPlayerButton = document.getElementById("add-player");
+    const nextTurnButton = document.getElementById("next-turn");
+    const nextAnswerButton = document.getElementById("next-answer");
+
+    let players = [];
+    let avatars = [];
+    let currentTurnIndex = 0;    // indeks lampki "Tura"
+    let currentAnswerIndex = 0;  // indeks lampki "Odpowiada"
+
+    /* ============================
+       FUNKCJE POMOCNICZE
+       ============================ */
+    function loadStorage() {
+      players = JSON.parse(localStorage.getItem("players")) || [];
+    }
+
+    function savePlayers() {
+      localStorage.setItem("players", JSON.stringify(players));
+    }
+
+    // Pobieranie avatarów z avatars.json
+    fetch("avatars.json")
+      .then(response => response.json())
+      .then(data => avatars = data)
+      .catch(err => console.error("Błąd podczas ładowania avatars.json:", err));
+
+    function addPlayer(name = `Gracz ${players.length + 1}`, points = 0) {
+      const playerId = `player-${Date.now()}`;
+      const playerAvatar = avatars.length > 0 ? avatars[players.length % avatars.length] : null;
+      const player = {
+        id: playerId,
+        name,
+        points,
+        avatar: playerAvatar,
+        // lifelines pozostawiamy, choć już nie używamy
+        lifelines: [false, false, false]
+      };
+      players.push(player);
+      renderPlayer(player);
+      savePlayers();
+      // Jeśli to pierwszy gracz, od razu ustaw lampki na indeks 0
+      if (players.length === 1) {
+        setTurnLight(0);
+        setAnswerLight(0);
+      }
+    }
+
+    function renderPlayer(player) {
+      const playerDiv = document.createElement("div");
+      playerDiv.classList.add("player");
+      playerDiv.id = player.id;
+
+      // Przycisk usuwania gracza
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "X";
+      deleteButton.onclick = () => removePlayer(player.id);
+      deleteButton.classList.add("remove-button");
+
+      // Div z avatar:
+      const avatarDiv = document.createElement("div");
+      avatarDiv.classList.add("player-avatar");
+      avatarDiv.style.backgroundImage = player.avatar ? `url('${player.avatar}')` : "none";
+      avatarDiv.addEventListener("click", () => {
+        showAvatarPicker(player, avatarDiv);
+      });
+
+      // Nazwa gracza (zmienna po kliknięciu)
+      const nameSpan = document.createElement("span");
+      nameSpan.classList.add("player-name");
+      nameSpan.textContent = player.name;
+      nameSpan.onclick = () => editPlayerName(player.id);
+
+      // Punkty gracza + przyciski +/-
+      const pointsSpan = document.createElement("span");
+      pointsSpan.classList.add("player-points");
+      pointsSpan.id = `points-${player.id}`;
+      pointsSpan.textContent = player.points;
+
+      const minusButton = document.createElement("button");
+      minusButton.textContent = "-";
+      minusButton.onclick = () => updateScore(player.id, -1);
+
+      const plusButton = document.createElement("button");
+      plusButton.textContent = "+";
+      plusButton.onclick = () => updateScore(player.id, 1);
+
+      // Dwie lampeczki: „Tura” i „Odpowiada”
+      const lightsContainer = document.createElement("div");
+      lightsContainer.classList.add("lights-container");
+      // Lampka „Tura”
+      const lampTurn = document.createElement("div");
+      lampTurn.classList.add("status-light", "turn-light");
+      // Lampka „Odpowiada”
+      const lampAnswer = document.createElement("div");
+      lampAnswer.classList.add("status-light", "answer-light");
+
+      lightsContainer.appendChild(lampTurn);
+      lightsContainer.appendChild(lampAnswer);
+
+      // Składamy w div.player
+      playerDiv.appendChild(deleteButton);
+      playerDiv.appendChild(avatarDiv);
+      playerDiv.appendChild(nameSpan);
+      playerDiv.appendChild(pointsSpan);
+      playerDiv.appendChild(minusButton);
+      playerDiv.appendChild(plusButton);
+      playerDiv.appendChild(lightsContainer);
+
+      playerList.appendChild(playerDiv);
+    }
+
+    function showAvatarPicker(player, avatarDiv) {
+      // Usuwamy ewentualne istniejące pickery
+      document.querySelectorAll('.avatar-picker').forEach(p => p.remove());
+
+      // Tworzymy nowy div z listą avatarów
+      const picker = document.createElement("div");
+      picker.classList.add("avatar-picker");
+
+      avatars.forEach(url => {
+        const option = document.createElement("div");
+        option.classList.add("avatar-option");
+        option.style.backgroundImage = `url('${url}')`;
+        option.addEventListener("click", (e) => {
+          e.stopPropagation();
+          // Po kliknięciu w miniaturkę avatara:
+          player.avatar = url;
+          avatarDiv.style.backgroundImage = `url('${url}')`;
+          savePlayers();
+          document.querySelectorAll('.avatar-picker').forEach(p => p.remove());
+        });
+        picker.appendChild(option);
+      });
+
+      avatarDiv.appendChild(picker);
+
+      // Kliknięcie poza picker zamknie go
+      setTimeout(() => {
+        const closeOnClickOutside = (e) => {
+          if (!picker.contains(e.target)) {
+            picker.remove();
+            document.removeEventListener("click", closeOnClickOutside);
+          }
+        };
+        document.addEventListener("click", closeOnClickOutside);
+      }, 0);
+    }
+
+    function updateScore(playerId, change) {
+      const player = players.find(p => p.id === playerId);
+      player.points += change;
+      document.getElementById(`points-${player.id}`).textContent = player.points;
+      savePlayers();
+    }
+
+    function editPlayerName(playerId) {
+      const player = players.find(p => p.id === playerId);
+      const nameSpan = document.querySelector(`#${playerId} .player-name`);
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = player.name;
+      input.className = "player-name-input";
+
+      input.addEventListener("blur", () => {
+        player.name = input.value.trim() || player.name;
+        nameSpan.textContent = player.name;
+        input.replaceWith(nameSpan);
+        savePlayers();
+      });
+
+      input.addEventListener("keypress", e => {
+        if (e.key === "Enter") input.blur();
+      });
+
+      nameSpan.replaceWith(input);
+      input.focus();
+    }
+
+    function removePlayer(playerId) {
+      if (confirm("Czy na pewno chcesz usunąć tego gracza?")) {
+        players = players.filter(p => p.id !== playerId);
+        document.getElementById(playerId).remove();
+        savePlayers();
+        // Jeśli usunięto aktualnie zaznaczonego gracza, przestaw lampeczki na następnego lub pierwszego:
+        if (players.length > 0) {
+          currentTurnIndex = currentTurnIndex % players.length;
+          currentAnswerIndex = currentAnswerIndex % players.length;
+          setTurnLight(currentTurnIndex);
+          setAnswerLight(currentAnswerIndex);
+        }
+      }
+    }
+
+    /* ============================
+       Obsługa lampek: „Tura” i „Odpowiada”
+       ============================ */
+    function clearAllTurnLights() {
+      document.querySelectorAll('.player .turn-light').forEach(light => {
+        light.classList.remove("on");
+      });
+    }
+    function clearAllAnswerLights() {
+      document.querySelectorAll('.player .answer-light').forEach(light => {
+        light.classList.remove("on");
+      });
+    }
+
+    function setTurnLight(idx) {
+      clearAllTurnLights();
+      if (players[idx]) {
+        const playerDiv = document.getElementById(players[idx].id);
+        if (playerDiv) {
+          const turnLight = playerDiv.querySelector(".turn-light");
+          if (turnLight) turnLight.classList.add("on");
+        }
+      }
+    }
+
+    function setAnswerLight(idx) {
+      clearAllAnswerLights();
+      if (players[idx]) {
+        const playerDiv = document.getElementById(players[idx].id);
+        if (playerDiv) {
+          const answerLight = playerDiv.querySelector(".answer-light");
+          if (answerLight) answerLight.classList.add("on");
+        }
+      }
+    }
+
+    function goToNextTurn() {
+      if (players.length === 0) return;
+      currentTurnIndex = (currentTurnIndex + 1) % players.length;
+      setTurnLight(currentTurnIndex);
+    }
+
+    function goToNextAnswer() {
+      if (players.length === 0) return;
+      currentAnswerIndex = (currentAnswerIndex + 1) % players.length;
+      setAnswerLight(currentAnswerIndex);
+    }
+
+    /* ============================
+       INICJALIZACJA (Po załadowaniu strony)
+       ============================ */
+    addPlayerButton.addEventListener("click", () => addPlayer());
+    nextTurnButton.addEventListener("click", goToNextTurn);
+    nextAnswerButton.addEventListener("click", goToNextAnswer);
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadStorage();
+      // Renderujemy wszystkich wczytanych graczy
+      players.forEach(renderPlayer);
+      // Ustawiamy początkowo lampki na gracza 1, jeśli jest co najmniej jeden
+      if (players.length > 0) {
+        currentTurnIndex = 0;
+        currentAnswerIndex = 0;
+        setTurnLight(0);
+        setAnswerLight(0);
+      }
+    });
+
+    /* ============================
+       Generowanie Tabeli 6×6 z Pytaniami
+       ============================ */
+    fetch("questions.json")
+      .then(res => res.json())
+      .then(questions => {
+        const table = document.getElementById("question-table");
+        const cellsPerRow = 6;
+
+        for (let row = 0; row < 6; row++) {
+          const tr = document.createElement("tr");
+          for (let col = 0; col < cellsPerRow; col++) {
+            const index = row * cellsPerRow + col;
+            const td = document.createElement("td");
+
+            if (index < questions.length && questions[index]) {
+              const q = questions[index];
+              const button = document.createElement("button");
+              button.textContent = q.category;
+              button.classList.add("category-button");
+
+              button.addEventListener("click", () => {
+                if (confirm(q.question)) {
+                  // Tworzymy avatarDiv i dodajemy listener na kliknięcie
+                  const avatarDiv = document.createElement("div");
+                  avatarDiv.classList.add("player-avatar");
+                  avatarDiv.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    showAvatarPicker({ avatar: null }, avatarDiv);
+                  });
+
+                  // Podmieniamy zawartość komórki na avatarDiv
+                  td.innerHTML = "";
+                  td.appendChild(avatarDiv);
+
+                  // Od razu otwieramy picker, by wybrać pierwszy raz
+                  showAvatarPicker({ avatar: null }, avatarDiv);
+                }
+              });
+
+              td.appendChild(button);
+            } else {
+              const placeholder = document.createElement("button");
+              placeholder.textContent = "???";
+              placeholder.disabled = true;
+              placeholder.classList.add("placeholder-button");
+              td.appendChild(placeholder);
+            }
+
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        }
+      })
+      .catch(err => console.error("Błąd ładowania questions.json:", err));
+  </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+/* ==============================
+   Gothic Teleturniej - Styl CSS
+   ============================== */
+
+/* Reset podstawowy */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* BODY */
+html, body {
+  height: 100%;
+  font-family: "Times New Roman", Times, serif;
+  background-color: #1a120b; /* bardzo ciemny brąz-prawie-czarny */
+  color: #f5e0b7;            /* kremowo-żółty, jak pergamin */
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(90deg, #3a2a1b, #1a120b);
+  padding: 1.5rem 0;
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #e0c68b; /* złotawe litery */
+  text-shadow: 0 0 8px #000;
+  border-bottom: 4px solid #5a3e2b;
+  font-family: "Georgia", serif;
+}
+
+/* MAIN - kontenery wewnątrz */
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  flex: 1;
+}
+
+/* SEKCJE */
+section {
+  background: #2b1d14; /* ciemny brąz */
+  border: 2px solid #5a3e2b;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  min-width: 360px;
+  max-width: 600px;
+  flex: 1;
+  position: relative;
+}
+
+/* NAGŁÓWKI SEKCJI */
+h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: #d8b56e; /* złoto-pomarańczowy */
+  text-shadow: 0 0 6px #000;
+  font-family: "Georgia", serif;
+}
+
+/* ============================
+   Sekcja Gracze
+   ============================ */
+.player {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  background: #3a2a1b; /* średni brąz */
+  border: 1px solid #5a3e2b;
+  border-radius: 8px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Dodane: aby picker avatarów był osadzony względem tego diva */
+.player-avatar {
+  width: 70px;
+  height: 70px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  border: 2px solid #d8b56e;
+  margin-right: 1rem;
+  background-color: #4b3422;
+  cursor: pointer;
+  position: relative; /* kluczowa zmiana */
+}
+
+.player-name {
+  flex: 1;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #f5e0b7;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.player-points {
+  margin: 0 0.5rem;
+  font-size: 1.1rem;
+  color: #e0c68b;
+}
+
+/* Dwie lampeczki: „Tura” i „Odpowiada” */
+.lights-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto; /* aby lampeczki były najbardziej po prawej */
+}
+
+.status-light {
+  width: 16px;
+  height: 16px;
+  background-color: #5a3e2b; /* wygaszony stan: ciemny brąz */
+  border: 2px solid #3a2a1b; /* obramowanie nieco jaśniejsze */
+  border-radius: 50%;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.status-light.on {
+  background-color: #e0c68b;  /* złote światło */
+  border-color: #d8b56e;      /* nieco jaśniejsze obramowanie */
+}
+
+/* Uniwersalne przyciski (Gracze, Dodaj, Usuwanie) */
+button {
+  padding: 0.5rem 0.8rem;
+  margin: 0 0.3rem;
+  border: none;
+  border-radius: 6px;
+  background: #5a3e2b; /* ciemny brąz */
+  color: #f5e0b7;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: "Georgia", serif;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  background: #7b5a3c; /* jaśniejszy brąz */
+  color: #fff2c4;
+  transform: scale(1.05);
+}
+
+/* Przycisk usuwania gracza */
+.remove-button {
+  padding: 0.2rem 0.5rem;
+  background: #7b1e1e; /* ciemna cegła */
+  color: #f5e0b7;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.remove-button:hover {
+  background: #9b2e2e;
+  color: #fff2c4;
+}
+
+/* Pole input nazwy gracza */
+.player-name-input {
+  font-size: 1.2rem;
+  font-family: "Georgia", serif;
+}
+
+/* Przycisk „Następny gracz” */
+.next-player-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: #7b5a3c; /* brązowo-pomarańczowy */
+  color: #f5e0b7;
+  font-family: "Georgia", serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.next-player-btn:hover {
+  background: #a07b50; /* jaśniejszy brąz */
+  transform: scale(1.03);
+}
+
+/* ============================
+   Sekcja Pytania (Tabela 6×6)
+   ============================ */
+#question-board {
+  margin-top: 0;
+}
+
+#question-table {
+  border-spacing: 8px;
+  margin: 0 auto;
+}
+
+#question-table td {
+  width: 70px;
+  height: 70px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+  border-radius: 8px;
+  background: #4b3422; /* średni brąz */
+  border: 2px solid #5a3e2b;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
+  position: relative;
+}
+
+/* Kluczowa zmiana: usunięcie paddingu/marginesu, box-sizing */
+#question-table button {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 0;          /* usuń domyślny padding */
+  margin: 0;           /* usuń marginesy */
+  font-size: 0.7rem;
+  font-weight: bold;
+  background: #7b5a3c; /* brąz pomarańcz */
+  color: #f5e0b7;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Georgia", serif;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease-in-out;
+}
+
+#question-table button:hover {
+  background: #a07b50; /* jaśniejszy miodowy brąz */
+  color: #fff2c4;
+  transform: scale(1.05);
+}
+
+/* Kolor placeholdera (pole bez pytania) */
+.placeholder-button {
+  background-color: #2b1d14; /* ciemny brąz */
+  color: #7b5a3c;
+  border: none;
+  cursor: not-allowed;
+  font-family: "Georgia", serif;
+  font-size: 0.7rem;
+}
+
+/* Avatar w komórce pytania */
+#question-table .player-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  border: 2px solid #d8b56e;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  position: relative; /* też osadzony kontekstowo */
+}
+
+/* ============================
+   Picker avatarów (menu wyboru)
+   ============================ */
+.avatar-picker {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  background: #3a2a1b; /* ciemny brąz */
+  padding: 5px;
+  border: 2px inset #5a3e2b;
+  z-index: 999;
+  top: calc(100% + 5px); /* zaraz pod elementem rodzicielskim */
+  left: 0;
+  border-radius: 4px;
+}
+
+/* Miniaturka avatara w pickerze */
+.avatar-option {
+  width: 50px;
+  height: 50px;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid #444;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.avatar-option:hover {
+  border-color: #d8b56e; /* złote obramowanie */
+}
+
+/* ============================
+   LIFELINES (Koła ratunkowe)
+   ============================ */
+.lifeline {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #d8b56e;
+  background: #2b1d14;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  color: #f5e0b7;
+  margin-left: 0.3rem;
+  transition: background 0.2s;
+}
+
+.lifeline.checked {
+  background-color: #d8b56e;
+  color: #2b1d14;
+  border-color: #d8b56e;
+}
+
+/* KOLOROWE EMOJI w opisie */
+.lifeline-emoji {
+  font-size: 1.2rem;
+}
+
+/* ============================
+   LIFELINE DESCRIPTION
+   ============================ */
+.lifeline-description {
+  background: #3a2a1b;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  border: 1px solid #5a3e2b;
+  color: #f5e0b7;
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lifeline-description p {
+  font-weight: bold;
+  color: #e0c68b;
+  text-shadow: 0 0 4px #000;
+  margin-bottom: 0.7rem;
+}
+
+.lifeline-description ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lifeline-description li {
+  display: flex;
+  align-items: center;
+  margin: 0.3rem 0;
+}
+
+/* ============================
+   FOOTER
+   ============================ */
+footer {
+  background: linear-gradient(90deg, #1a120b, #3a2a1b);
+  color: #b0a080;
+  text-align: center;
+  padding: 0.7rem 0;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  border-top: 3px solid #5a3e2b;
+  font-family: "Georgia", serif;
+}
