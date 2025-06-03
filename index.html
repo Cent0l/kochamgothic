@@ -9,7 +9,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-  <header>JESZCZENWM</header>
+  <header>EmPeTrójniej</header>
 
   <main>
     <!-- ============================
@@ -74,13 +74,11 @@
         name,
         points,
         avatar: playerAvatar,
-        // lifelines pozostawiamy, choć już nie używamy
         lifelines: [false, false, false]
       };
       players.push(player);
       renderPlayer(player);
       savePlayers();
-      // Jeśli to pierwszy gracz, od razu ustaw lampki na indeks 0
       if (players.length === 1) {
         setTurnLight(0);
         setAnswerLight(0);
@@ -129,13 +127,10 @@
       // Dwie lampeczki: „Tura” i „Odpowiada”
       const lightsContainer = document.createElement("div");
       lightsContainer.classList.add("lights-container");
-      // Lampka „Tura”
       const lampTurn = document.createElement("div");
       lampTurn.classList.add("status-light", "turn-light");
-      // Lampka „Odpowiada”
       const lampAnswer = document.createElement("div");
       lampAnswer.classList.add("status-light", "answer-light");
-
       lightsContainer.appendChild(lampTurn);
       lightsContainer.appendChild(lampAnswer);
 
@@ -152,20 +147,15 @@
     }
 
     function showAvatarPicker(player, avatarDiv) {
-      // Usuwamy ewentualne istniejące pickery
       document.querySelectorAll('.avatar-picker').forEach(p => p.remove());
-
-      // Tworzymy nowy div z listą avatarów
       const picker = document.createElement("div");
       picker.classList.add("avatar-picker");
-
       avatars.forEach(url => {
         const option = document.createElement("div");
         option.classList.add("avatar-option");
         option.style.backgroundImage = `url('${url}')`;
         option.addEventListener("click", (e) => {
           e.stopPropagation();
-          // Po kliknięciu w miniaturkę avatara:
           player.avatar = url;
           avatarDiv.style.backgroundImage = `url('${url}')`;
           savePlayers();
@@ -173,10 +163,7 @@
         });
         picker.appendChild(option);
       });
-
       avatarDiv.appendChild(picker);
-
-      // Kliknięcie poza picker zamknie go
       setTimeout(() => {
         const closeOnClickOutside = (e) => {
           if (!picker.contains(e.target)) {
@@ -198,23 +185,19 @@
     function editPlayerName(playerId) {
       const player = players.find(p => p.id === playerId);
       const nameSpan = document.querySelector(`#${playerId} .player-name`);
-
       const input = document.createElement("input");
       input.type = "text";
       input.value = player.name;
       input.className = "player-name-input";
-
       input.addEventListener("blur", () => {
         player.name = input.value.trim() || player.name;
         nameSpan.textContent = player.name;
         input.replaceWith(nameSpan);
         savePlayers();
       });
-
       input.addEventListener("keypress", e => {
         if (e.key === "Enter") input.blur();
       });
-
       nameSpan.replaceWith(input);
       input.focus();
     }
@@ -224,7 +207,6 @@
         players = players.filter(p => p.id !== playerId);
         document.getElementById(playerId).remove();
         savePlayers();
-        // Jeśli usunięto aktualnie zaznaczonego gracza, przestaw lampeczki na następnego lub pierwszego:
         if (players.length > 0) {
           currentTurnIndex = currentTurnIndex % players.length;
           currentAnswerIndex = currentAnswerIndex % players.length;
@@ -252,21 +234,16 @@
       clearAllTurnLights();
       if (players[idx]) {
         const playerDiv = document.getElementById(players[idx].id);
-        if (playerDiv) {
-          const turnLight = playerDiv.querySelector(".turn-light");
-          if (turnLight) turnLight.classList.add("on");
-        }
+        const turnLight = playerDiv.querySelector(".turn-light");
+        if (turnLight) turnLight.classList.add("on");
       }
     }
-
     function setAnswerLight(idx) {
       clearAllAnswerLights();
       if (players[idx]) {
         const playerDiv = document.getElementById(players[idx].id);
-        if (playerDiv) {
-          const answerLight = playerDiv.querySelector(".answer-light");
-          if (answerLight) answerLight.classList.add("on");
-        }
+        const answerLight = playerDiv.querySelector(".answer-light");
+        if (answerLight) answerLight.classList.add("on");
       }
     }
 
@@ -275,7 +252,6 @@
       currentTurnIndex = (currentTurnIndex + 1) % players.length;
       setTurnLight(currentTurnIndex);
     }
-
     function goToNextAnswer() {
       if (players.length === 0) return;
       currentAnswerIndex = (currentAnswerIndex + 1) % players.length;
@@ -291,9 +267,7 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       loadStorage();
-      // Renderujemy wszystkich wczytanych graczy
       players.forEach(renderPlayer);
-      // Ustawiamy początkowo lampki na gracza 1, jeśli jest co najmniej jeden
       if (players.length > 0) {
         currentTurnIndex = 0;
         currentAnswerIndex = 0;
@@ -324,22 +298,30 @@
               button.classList.add("category-button");
 
               button.addEventListener("click", () => {
-                if (confirm(q.question)) {
-                  // Tworzymy avatarDiv i dodajemy listener na kliknięcie
-                  const avatarDiv = document.createElement("div");
-                  avatarDiv.classList.add("player-avatar");
-                  avatarDiv.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    showAvatarPicker({ avatar: null }, avatarDiv);
-                  });
+                // Najpierw wyświetlamy pytanie
+                alert(q.question);
+                // Po zamknięciu okienka pytania wyświetlamy odpowiedź
+                alert(q.answer);
 
-                  // Podmieniamy zawartość komórki na avatarDiv
-                  td.innerHTML = "";
-                  td.appendChild(avatarDiv);
-
-                  // Od razu otwieramy picker, by wybrać pierwszy raz
+                // Po zamknięciu drugiego okienka wstawiamy avatar
+                const avatarDiv = document.createElement("div");
+                avatarDiv.classList.add("player-avatar");
+                avatarDiv.addEventListener("click", (e) => {
+                  e.stopPropagation();
                   showAvatarPicker({ avatar: null }, avatarDiv);
-                }
+                });
+                // Dwuklik – ponownie pokazuje pytanie i odpowiedź
+                avatarDiv.addEventListener("dblclick", (e) => {
+                  e.stopPropagation();
+                  alert(q.question);
+                  alert(q.answer);
+                });
+
+                td.innerHTML = "";
+                td.appendChild(avatarDiv);
+
+                // Od razu otwieramy picker, by wybrać avatar
+                showAvatarPicker({ avatar: null }, avatarDiv);
               });
 
               td.appendChild(button);

@@ -1,10 +1,182 @@
 [
   {
-    "category": "Wiedza ogólna",
-    "question": "Ile to jest 2 + 2?"
+    "category": "Pytanie 1",
+    "question": "W którym roku została wydana pierwsza część gry Gothic?",
+    "answer": "Pierwsza część Gothic została wydana w 2001 roku."
   },
   {
-    "category": "Rośliny",
-    "question": "Jakie drzewo ma żołędzie?"
+    "category": "Pytanie 2",
+    "question": "Jak nazywa się główny bohater pierwszej części Gothic?",
+    "answer": "Głównym bohaterem jest Bezimienny (ang. Nameless Hero)."
+  },
+  {
+    "category": "Pytanie 3",
+    "question": "Jakie frakcje można wybrać w pierwszym Gothic?",
+    "answer": "We frakcji Magów, Bractwie Stali lub Górnikach."
+  },
+  {
+    "category": "Pytanie 4",
+    "question": "Jak nazywa się katorżnicza kolonia, w której rozgrywa się akcja pierwszego Gothic?",
+    "answer": "Kolonia nazywa się Kolonią Kar (Penitentiary Camp)."
+  },
+  {
+    "category": "Pytanie 5",
+    "question": "Który władca założył Kolonię Kar?",
+    "answer": "Kolonię Kar założył Bractwo Żelaznej Wieży pod rządami mailońskiego władcy."
+  },
+  {
+    "category": "Pytanie 6",
+    "question": "Jaką rolę pełnił Diego w pierwszym Gothic?",
+    "answer": "Diego był członkiem Bractwa Ognia i mentorował Bezimiennemu."
+  },
+  {
+    "category": "Pytanie 7",
+    "question": "Co trzeba zrobić, aby opuścić Kolonię Kar w Gothic?",
+    "answer": "Trzeba zdobyć zaufanie frakcji i uzyskać pozwolenie, a następnie zniszczyć magiczny krąg i pokonać Strażników."
+  },
+  {
+    "category": "Pytanie 8",
+    "question": "Jak nazywa się magiczny krąg w Kolonii Kar, który zmienia ludzi w potwory?",
+    "answer": "To jest Krąg Ognia (Fire Circle)."
+  },
+  {
+    "category": "Pytanie 9",
+    "question": "Jak nazywa się mentor magów ognia w pierwszym Gothic?",
+    "answer": "Mentorem magów ognia jest Xardas."
+  },
+  {
+    "category": "Pytanie 10",
+    "question": "Co jest głównym zagrożeniem dla kolonii w Gothic?",
+    "answer": "Głównym zagrożeniem są potwory uwolnione z magicznego kręgu i konflikty między frakcjami."
+  },
+  {
+    "category": "Pytanie 11",
+    "question": "Jak nazywa się twierdza magów w pierwszym Gothic?",
+    "answer": "Twierdza magów to Wieża Magów (Tower of Mage)."
+  },
+  {
+    "category": "Pytanie 12",
+    "question": "Kto jest przywódcą Bractwa Stali w Gothic?",
+    "answer": "Przywódcą Bractwa Stali jest Lester."
+  },
+  {
+    "category": "Pytanie 13",
+    "question": "Jakie zwierzęta atakują kolonię w prologu Gothic?",
+    "answer": "W prologu kolonię atakują wilki."
+  },
+  {
+    "category": "Pytanie 14",
+    "question": "Co trzeba ukraść, by zyskać przychylność górników w Gothic?",
+    "answer": "Trzeba wykraść medalion od szefa górników."
+  },
+  {
+    "category": "Pytanie 15",
+    "question": "Jak nazywa się zamek, do którego trafiamy w Gothic II?",
+    "answer": "To jest miasto Khorinis i zamek hrabiego Rhobara II."
+  },
+  {
+    "category": "Pytanie 16",
+    "question": "W Gothic II, która postać prowadzi cię do hrabiego Rhobara?",
+    "answer": "Postać Malik prowadzi do hrabiego Rhobara."
+  },
+  {
+    "category": "Pytanie 17",
+    "question": "Jak nazywa się wyspa, na której rozgrywa się Gothic II?",
+    "answer": "Wyspa nazywa się Khorinis."
+  },
+  {
+    "category": "Pytanie 18",
+    "question": "Co trzeba zrobić, aby dostać się do Świątyni Ognia w Gothic II?",
+    "answer": "Trzeba zdobyć zaproszenie od High Mage Xardasa lub pokonać straże wokół świątyni."
+  },
+  {
+    "category": "Pytanie 19",
+    "question": "Jakie stworzenia pojawiają się w Dolinie Minotaurów w Gothic II?",
+    "answer": "W Dolinie Minotaurów pojawiają się minotaury."
+  },
+  {
+    "category": "Pytanie 20",
+    "question": "Jak nazywa się przywódca magów ognia w Gothic II?",
+    "answer": "W Gothic II przywódcą magów ognia wciąż jest Xardas."
+  },
+  {
+    "category": "Pytanie 21",
+    "question": "Kto jest władcą miasta Khorinis w Gothic II?",
+    "answer": "Hrabia Rhobar II jest władcą miasta Khorinis."
+  },
+  {
+    "category": "Pytanie 22",
+    "question": "Jakie zwierzę towarzyszy ci w sekwencji w Górach Kamienia w Gothic II?",
+    "answer": "Towarzyszy ci białe wilkołaki (Snow Troll)."
+  },
+  {
+    "category": "Pytanie 23",
+    "question": "Co trzeba zrobić, aby zdobyć zaufanie kowala Xardasa w Gothic II?",
+    "answer": "Trzeba dostarczyć jądro lodowego trolla jako dowód odwagi."
+  },
+  {
+    "category": "Pytanie 24",
+    "question": "Jakie artefakty fragmentów kryształu są potrzebne w Gothic II?",
+    "answer": "Potrzebne są trzy fragmenty kryształu: Czerwony, Żółty i Niebieski."
+  },
+  {
+    "category": "Pytanie 25",
+    "question": "Co łączy fabułę Gothic II: Noc Kruka z poprzednią częścią?",
+    "answer": "Noc Kruka dzieje się krótko po wydarzeniach Gothic II i kontynuuje wątek heroiczny Bezimiennego."
+  },
+  {
+    "category": "Pytanie 26",
+    "question": "Jak nazywa się smok, którego trzeba pokonać w Nocy Kruka?",
+    "answer": "Smok nazywa się Shantyr."
+  },
+  {
+    "category": "Pytanie 27",
+    "question": "W Gothic III, które królestwa walczą ze sobą o władzę?",
+    "answer": "Konflikt toczy się między Myrtaną, Nordmarczykami i Orkami."
+  },
+  {
+    "category": "Pytanie 28",
+    "question": "Jak nazywa się protagonistka w dodatku Gothic 3: Forsaken Gods?",
+    "answer": "Głównym bohaterem w Forsaken Gods nadal jest Bezimienny, nie ma protagonistki żeńskiej."
+  },
+  {
+    "category": "Pytanie 29",
+    "question": "Co jest głównym celem bohatera w Gothic III?",
+    "answer": "Bohater musi obronić Myrtanę przed najazdem Orków."
+  },
+  {
+    "category": "Pytanie 30",
+    "question": "Jakie plemię Orków pojawia się w Gothic III?",
+    "answer": "Pojawia się plemię Orków z Pustkowi Shamala."
+  },
+  {
+    "category": "Pytanie 31",
+    "question": "Jaką nazwę nosi pustynna kraina w Gothic III?",
+    "answer": "To jest pustynia Jarkendar."
+  },
+  {
+    "category": "Pytanie 32",
+    "question": "Co trzeba zdobyć, aby sprowadzić wodę do Ogronu w Gothic III?",
+    "answer": "Trzeba znaleźć i dostarczyć źródło wody z Reedmooru."
+  },
+  {
+    "category": "Pytanie 33",
+    "question": "Jak nazywa się orkijski przywódca w Gothic III?",
+    "answer": "Orkijski przywódca to Govinda, wódz Nortmora."
+  },
+  {
+    "category": "Pytanie 34",
+    "question": "Jakie stworzenia zamieszkują bagna w Gothic II?",
+    "answer": "W bagna w Gothic II występują krokodyle i zombie."
+  },
+  {
+    "category": "Pytanie 35",
+    "question": "Co trzeba zrobić, aby otworzyć wrota Lament w Gothic I?",
+    "answer": "Należy zdobyć magiczny klucz od magów ognia i pokonać strażników."
+  },
+  {
+    "category": "Pytanie 36",
+    "question": "Jak nazywa się broń sugerowana przez Diego na początku Gothic?",
+    "answer": "Diego sugeruje użycie miecza szczerozłotego."
   }
 ]
