@@ -4,12 +4,67 @@
   <meta charset="UTF-8" />
   <meta name="language" content="pl" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EmPeTrójniej</title>
+  <title>kochamgothic</title>
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <!-- DODATKOWY STYL DLA MODALU (jeśli nie masz możliwości wstawienia w style.css, możesz skopiować ten fragment tutaj) -->
+  <style>
+    /* ============================
+       Modal Overlay (nakładka)
+       ============================ */
+    #modal {
+      display: none; /* początkowo ukryty */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.75);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    #modal .modal-content {
+      background-color: #2b1d14; /* ciemny brąz */
+      border: 2px solid #5a3e2b;
+      border-radius: 8px;
+      padding: 1.5rem;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      color: #f5e0b7;
+      font-family: "Georgia", serif;
+    }
+    #modal .modal-content h3 {
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      color: #d8b56e;
+      text-shadow: 0 0 6px #000;
+    }
+    #modal .modal-content p {
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+    #modal .modal-button {
+      padding: 0.5rem 1rem;
+      background: #7b5a3c; /* brązowo-pomarańczowy */
+      color: #f5e0b7;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+    #modal .modal-button:hover {
+      background: #a07b50; /* jaśniejszy brąz */
+      transform: scale(1.03);
+    }
+  </style>
 </head>
 <body>
-  <header>EmPeTrójniej</header>
+  <header>KochamGothic</header>
 
   <main>
     <!-- ============================
@@ -35,6 +90,17 @@
 
   <footer>Teleturniej Toczkensa. Created by SiemkaMati</footer>
 
+  <!-- ============================
+       Nasz Własny Modal (nakładka)
+       ============================ -->
+  <div id="modal">
+    <div class="modal-content">
+      <h3 id="modal-title">Tytuł</h3>
+      <p id="modal-text">Treść pytania lub odpowiedzi...</p>
+      <button id="modal-button" class="modal-button">Dalej</button>
+    </div>
+  </div>
+
   <script>
     /* ============================
        ZMIENNE GLOBALNE
@@ -43,6 +109,16 @@
     const addPlayerButton = document.getElementById("add-player");
     const nextTurnButton = document.getElementById("next-turn");
     const nextAnswerButton = document.getElementById("next-answer");
+
+    // Odnośnie modalu:
+    const modal       = document.getElementById("modal");
+    const modalTitle  = document.getElementById("modal-title");
+    const modalText   = document.getElementById("modal-text");
+    const modalButton = document.getElementById("modal-button");
+
+    let modalCurrentStep = 0; 
+    let modalQuestionObj = null; 
+    let modalCellTd      = null; 
 
     let players = [];
     let avatars = [];
@@ -277,6 +353,51 @@
     });
 
     /* ============================
+       Obsługa modalu
+       ============================ */
+    function showModalWithQuestion(obj, tdCell) {
+      modalCurrentStep = 1;       // 1 = pokazujemy pytanie
+      modalQuestionObj = obj;     // przechowujemy obiekt pytanie+odpowiedź
+      modalCellTd = tdCell;       // przechowujemy referencję do <td>
+      modalTitle.textContent = "Pytanie";
+      modalText.textContent  = obj.question;
+      modalButton.textContent = "Dalej";
+      modal.style.display     = "flex";
+    }
+
+    modalButton.addEventListener("click", () => {
+      if (modalCurrentStep === 1) {
+        // 1) Zmieniamy treść na odpowiedź
+        modalTitle.textContent = "Odpowiedź";
+        modalText.textContent  = modalQuestionObj.answer;
+        modalButton.textContent = "Zamknij";
+        modalCurrentStep = 2;
+      } else {
+        // 2) Zamykamy modal i wstawiamy avatar
+        modal.style.display = "none";
+        // Wstawienie avatara do komórki <td>:
+        const avatarDiv = document.createElement("div");
+        avatarDiv.classList.add("player-avatar");
+
+        // Kliknięcie pojedyncze – avatar-picker
+        avatarDiv.addEventListener("click", (e) => {
+          e.stopPropagation();
+          showAvatarPicker({ avatar: null }, avatarDiv);
+        });
+        // Dwuklik – ponownie pokazujemy pytanie/odpowiedź
+        avatarDiv.addEventListener("dblclick", (e) => {
+          e.stopPropagation();
+          showModalWithQuestion(modalQuestionObj, modalCellTd);
+        });
+
+        modalCellTd.innerHTML = "";
+        modalCellTd.appendChild(avatarDiv);
+        // Od razu otwieramy picker, by wybrać avatar
+        showAvatarPicker({ avatar: null }, avatarDiv);
+      }
+    });
+
+    /* ============================
        Generowanie Tabeli 6×6 z Pytaniami
        ============================ */
     fetch("questions.json")
@@ -298,30 +419,8 @@
               button.classList.add("category-button");
 
               button.addEventListener("click", () => {
-                // Najpierw wyświetlamy pytanie
-                alert(q.question);
-                // Po zamknięciu okienka pytania wyświetlamy odpowiedź
-                alert(q.answer);
-
-                // Po zamknięciu drugiego okienka wstawiamy avatar
-                const avatarDiv = document.createElement("div");
-                avatarDiv.classList.add("player-avatar");
-                avatarDiv.addEventListener("click", (e) => {
-                  e.stopPropagation();
-                  showAvatarPicker({ avatar: null }, avatarDiv);
-                });
-                // Dwuklik – ponownie pokazuje pytanie i odpowiedź
-                avatarDiv.addEventListener("dblclick", (e) => {
-                  e.stopPropagation();
-                  alert(q.question);
-                  alert(q.answer);
-                });
-
-                td.innerHTML = "";
-                td.appendChild(avatarDiv);
-
-                // Od razu otwieramy picker, by wybrać avatar
-                showAvatarPicker({ avatar: null }, avatarDiv);
+                // Otwarcie modalu z pytaniem/odpowiedzią
+                showModalWithQuestion(q, td);
               });
 
               td.appendChild(button);
